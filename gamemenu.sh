@@ -4,15 +4,14 @@ server="NIVIDIA_PC_IP" #Have to be replaced
 
 while [ "$game" != "q" ]
 do
-    #clear
+    clear
+
     i=1
     output=$(moonlight list "$server")
-
     while read -r line;
     do
 	echo "$line"
     	games[i]=${line##*. }
-	# echo ${games[i]}
 	i=$(( $i + 1 ))
     done <<< "$output"
 
@@ -21,6 +20,8 @@ do
     game=${games[selected]}
 
     echo "Starting \"$game\" on \"$server\"..."
-    output=$(moonlight stream -1080 -60fps -app \""$game"\" "$server")
+    params="-app \"$game\" $server"
 
+    $(moonlight stream -1080 -60fps -app "$game" "$server")
+    $(moonlight quit "$server")
 done
